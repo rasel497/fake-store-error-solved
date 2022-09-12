@@ -18,7 +18,8 @@ const showProducts = (products) => {
 
    document.getElementById("all-products").innerHTML = "";
 
-   const allProducts = products.slice(0, 10).map((pd) => pd);
+   // const allProducts = products.slice(0, 10).map((pd) => pd);
+   const allProducts = products.map((pd) => pd);//show total product solved-08
    for (const product of allProducts) {
       // const image = product.images;
       const image = product.image; // line23-resolved-01-show img
@@ -50,6 +51,7 @@ const addToCart = (id, price) => {
    updatePrice('price', price); //line-49 resolved-02-add to cart
 
    updateTaxAndCharge();
+   updateTotal(); // add -04-update total
    document.getElementById('total-Products').innerText = count;
 };
 
@@ -61,9 +63,9 @@ const showProductDetails = (product_id) => {
 };
 
 const showProductDetailsInModal = (product_details) => {
-   console.log(product_details);
+   // console.log(product_details);
    setInnerText('exampleModalLabel', product_details.title);
-   setInnerText('product_id', product_details.id);
+   setInnerText('productId', product_details.id); // resolve -07 product details
    setInnerText('modal_body', product_details.description);
    setInnerText('rating', product_details.rating.rate);
 };
@@ -81,31 +83,40 @@ const updatePrice = (id, value) => {
    const convertPrice = parseFloat(value); //l-80 resolved-03-Int to praseFloat
    const total = convertedOldPrice + convertPrice;
    // document.getElementById(id).innerText = Math.round(total);
-   document.getElementById(id).innerText = (total); // l-88 resolved-04-round to only value
+   document.getElementById(id).innerText = (total).toFixed(2); // l-88 resolved-04-round to only value
 
 };
 
 // set innerText function
 const setInnerText = (id, value) => {
-   document.getElementById(id).innerText = Math.round(value);
-
+   // solved-06-modal title. NaN 
+   if (typeof value === "number") {
+      value = Math.round(value);
+   }
+   console.count();
+   console.log(id, value);
+   document.getElementById(id).innerText = value;
 };
 
 // update delivery charge and total Tax
 const updateTaxAndCharge = () => {
    const priceConverted = getInputValue('price');
-   if (priceConverted > 200) {
-      setInnerText('delivery-charge', 30);
-      setInnerText('total-tax', priceConverted * 0.2);
-   }
-   if (priceConverted > 400) {
-      setInnerText('delivery-charge', 50);
-      setInnerText('total-tax', priceConverted * 0.3);
-   }
    if (priceConverted > 500) {
       setInnerText('delivery-charge', 60);
       setInnerText('total-tax', priceConverted * 0.4);
    }
+   else if (priceConverted > 400) {
+      setInnerText('delivery-charge', 50);
+      setInnerText('total-tax', priceConverted * 0.3);
+   }
+   else if (priceConverted > 200) {
+      setInnerText('delivery-charge', 30);
+      setInnerText('total-tax', priceConverted * 0.2);
+   }
+   else {
+      setInnerText('delivery-charge', 20);
+   }
+
 };
 
 //grandTotal update function
@@ -114,16 +125,17 @@ const updateTotal = () => {
       getInputValue('price') +
       getInputValue('delivery-charge') +
       getInputValue('total-tax');
-   document.getElementById('total').innerText = grandTotal;
+   document.getElementById('total').innerText = grandTotal.toFixed(2); // add toFixed solved-5
 };
 
 // search by category
 document.getElementById("search-btn").addEventListener("click", function () {
    const inputField = document.getElementById("input-value").value;
-   const searchedProduct = arr[0].find((p) =>
-      p.category.startsWith(`${inputField}`)
+   const searchedProduct = arr[0].filter((p) =>
+      p.title.toLowerCase().includes(inputField.toLowerCase())
    );
    showProducts(searchedProduct);
 });
 
 
+// console.table(arr[0])
