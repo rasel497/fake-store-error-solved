@@ -70,21 +70,25 @@ const showProductDetailsInModal = (product_details) => {
 
 const getInputValue = (id) => {
    const element = document.getElementById(id).innerText;
-   const converted = parseInt(element);
+   const converted = parseFloat(element); //resolved-03-Int to praseFloat
    return converted;
 };
 
 // main price update function
 const updatePrice = (id, value) => {
    const convertedOldPrice = getInputValue(id);
-   const convertPrice = parseInt(value);
+   // const convertPrice = parseInt(value);
+   const convertPrice = parseFloat(value); //l-80 resolved-03-Int to praseFloat
    const total = convertedOldPrice + convertPrice;
-   document.getElementById(id).innerText = Math.round(total);
+   // document.getElementById(id).innerText = Math.round(total);
+   document.getElementById(id).innerText = (total); // l-88 resolved-04-round to only value
+
 };
 
 // set innerText function
 const setInnerText = (id, value) => {
    document.getElementById(id).innerText = Math.round(value);
+
 };
 
 // update delivery charge and total Tax
