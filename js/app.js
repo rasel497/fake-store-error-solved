@@ -13,14 +13,16 @@ loadProducts('https://fakestoreapi.com/products');
 
 // show all product in UI
 const showProducts = (products) => {
-   
+
    setInnerText('total_products', products.length);
 
    document.getElementById("all-products").innerHTML = "";
 
    const allProducts = products.slice(0, 10).map((pd) => pd);
    for (const product of allProducts) {
-      const image = product.images;
+      // const image = product.images;
+      const image = product.image; // line23-resolved-01-show img
+      // console.log(product); //check undefined
       const div = document.createElement('div');
       div.classList.add('product');
       div.innerHTML = `<div class="single-product">
@@ -44,7 +46,8 @@ let count = 0;
 
 const addToCart = (id, price) => {
    count = count + 1;
-   updatePrice('price', value);
+   // updatePrice('price', value);
+   updatePrice('price', price); //line-49 resolved-02-add to cart
 
    updateTaxAndCharge();
    document.getElementById('total-Products').innerText = count;
@@ -114,9 +117,9 @@ const updateTotal = () => {
 document.getElementById("search-btn").addEventListener("click", function () {
    const inputField = document.getElementById("input-value").value;
    const searchedProduct = arr[0].find((p) =>
-     p.category.startsWith(`${inputField}`)
+      p.category.startsWith(`${inputField}`)
    );
    showProducts(searchedProduct);
- });
+});
 
 
